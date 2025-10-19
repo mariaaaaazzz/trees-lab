@@ -9,9 +9,26 @@ import org.junit.jupiter.api.Test;
 
 public class TreeTests {
     private Tree<Integer> makeSampleTree() {
-        // TODO: add your sample tree from the reading here!
-        Node<Integer> sampleTree = null;
-        return new Tree<Integer>(sampleTree);
+
+
+        Node<Integer> sampleTree = 
+            new Node<>(5,
+                new Node<>(2,
+                    new Node<>(1),
+                    new Node<>(3)
+                ),
+                new Node<>(8,
+                    new Node<>(7,
+                        new Node<>(6),
+                        null
+                    ),
+                    new Node<>(9,
+                        null,
+                        new Node<>(10)
+                    )
+                )
+            );
+        return new Tree<>(sampleTree);
     }
 
     @Test
@@ -48,7 +65,7 @@ public class TreeTests {
     @Test
     public void sampleTreeToStringTest() {
         Tree<Integer> sampleTree = makeSampleTree();
-        assertEquals("TODO: fille me in with the intended results of your toString implementation", sampleTree.toString());
+        assertEquals("[1, 2, 3, 5, 6, 7, 8, 9, 10]", sampleTree.toString());
     }
 
     @Test

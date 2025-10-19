@@ -1,5 +1,6 @@
 package edu.grinnell.csc207.trees;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,8 +54,31 @@ public class Tree<T extends Comparable<? super T>> {
      * @return true iff the tree contains <code>value</code>
      */
     public boolean contains(T value) {
-        throw new UnsupportedOperationException();
+        Node<T> node = root;
+        if (node == null){
+            return false;
+        }
+        else {
+            return containsHelper(value, node);
+        }
     }
+
+    public boolean containsHelper(T value, Node<T> node){
+        if (node == null){
+            return false;
+        }
+        if (node.value.equals(value)){
+            return true;
+        }
+        if (containsHelper(value, node.left)){
+            return true;
+        }
+        else {
+            return containsHelper(value, node.right);
+        }
+    }
+
+
 
     ///// Part 2: toString
    
@@ -64,30 +88,87 @@ public class Tree<T extends Comparable<? super T>> {
      */
     @Override
     public String toString() {
-        throw new UnsupportedOperationException();
+        return "[" + toStringHelper(root).trim() + "]";
+}
+
+/**
+ * Recursively collect values into a string.
+ */
+private String toStringHelper(Node<T> node) {
+    if (node == null) {
+        return "";
     }
 
+    String left = toStringHelper(node.left);
+    String right = toStringHelper(node.right);
+
+    String result = "";
+    if (!left.isEmpty()) {
+        result += left + ", ";
+    }
+    result += node.value;
+    if (!right.isEmpty()) {
+        result += ", " + right;
+    }
+    return result;
+}
+    
     ///// Part 3: Traversals
 
     /**
      * @return the elements of this tree collected via an in-order traversal
      */
     public List<T> toListInorder() {
-        throw new UnsupportedOperationException();
+        List<T> result = new ArrayList<>();
+        toListInorderHelper(root, result);
+        return result;
+    }
+
+    private void toListInorderHelper(Node<T> node, List<T> list) {
+        if (node == null) {
+            return; 
+        }
+
+        toListInorderHelper(node.left, list);
+        list.add(node.value);
+        toListInorderHelper(node.right, list);
     }
 
     /**
      * @return the elements of this tree collected via a pre-order traversal
      */
     public List<T> toListPreorder() {
-        throw new UnsupportedOperationException();
+        List<T> result = new ArrayList<>();
+        toListPreorderHelper(root, result);
+        return result;
     }
 
+    private void toListPreorderHelper(Node<T> node, List<T> list) {
+        if (node == null) {
+            return; 
+        }
+
+        list.add(node.value); 
+        toListPreorderHelper(node.left, list); 
+        toListPreorderHelper(node.right, list); 
+    }
     /**
      * @return the elements of this tree collected via a post-order traversal
      */
     public List<T> toListPostorder() {
-        throw new UnsupportedOperationException();
+        List<T> result = new ArrayList<>();
+        toListPostorderHelper(root, result);
+        return result;
+    }
+
+    private void toListPostorderHelper(Node<T> node, List<T> list) {
+        if (node == null) {
+            return; 
+        }
+
+        toListPostorderHelper(node.left, list);  
+        toListPostorderHelper(node.right, list);
+        list.add(node.value);   
     }
 
     ///// Extra: Pretty Printing
@@ -96,9 +177,25 @@ public class Tree<T extends Comparable<? super T>> {
      * @return a string represent of this tree in bulleted list form.
      */
     public String toPrettyString() {
-        throw new UnsupportedOperationException();
+        return toPrettyStringHelper(root, 0);
     }
 
+    private String toPrettyStringHelper(Node<T> node, int depth) {
+        if (node == null) {
+            return "";
+        }
+
+        String indent = "";
+        for (int i = 0; i < depth; i++) {
+            indent += "  ";  
+        }
+
+        String s = indent + "- " + node.value + "\n";
+        s += toPrettyStringHelper(node.left, depth + 1);
+        s += toPrettyStringHelper(node.right, depth + 1);
+
+        return s;
+    }
     /**
      * The main driver for this program
      * @param args the command-line arguments
